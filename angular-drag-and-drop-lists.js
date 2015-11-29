@@ -213,7 +213,7 @@ angular.module('dndLists', [])
    *                        - event: The original drop event sent by the browser.
    *                        - index: The position in the list at which the element would be dropped.
    *                        - item: The transferred object.
-   *                        - targetArray: The target list
+   *                        - target: The target list
    * - dnd-external-sources Optional boolean expression. When it evaluates to true, the list accepts
    *                        drops from sources outside of the current browser tab. This allows to
    *                        drag and drop accross different browser tabs. Note that this will allow
@@ -345,7 +345,14 @@ angular.module('dndLists', [])
         // Retrieve the JSON array and insert the transferred object into it.
         var targetArray = scope.$eval(attr.dndList);
         if (attr.dndInserter) {
-            invokeCallback(attr.dndInserter, event, index, transferredObject, targetArray);
+          
+           $parse(attr.dndInserter)(scope, {
+              event: event,
+              index: index,
+              item: transferredObject || undefined,
+              target: targetArray
+            });
+
         } else {
             // Retrieve the JSON array and insert the transferred object into it.
             scope.$apply(function() {
