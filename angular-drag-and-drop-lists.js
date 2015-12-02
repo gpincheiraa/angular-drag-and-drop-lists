@@ -161,6 +161,21 @@ angular.module('dndLists', [])
         event.stopPropagation();
       });
 
+
+      element.on('dblclick', function(event) {
+        if (!attr.dndDblclick) return;
+
+        event = event.originalEvent || event;
+        
+        scope.$apply(function() {
+          $parse(attr.dndDblclick)(scope, {event: event});
+        });
+
+        // Prevent triggering dndDblclick in parent elements.
+        event.stopPropagation();
+
+      });
+
       /**
        * Workaround to make element draggable in IE9
        */
